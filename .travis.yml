@@ -1,0 +1,22 @@
+
+language: node_js
+node_js:
+    - 13
+
+services:
+    - docker
+
+install:
+    - echo "nothing needs to be installed"
+
+before_scripts:
+    - echo "no tests"
+
+script:
+    - docker --version
+    - docker build -t feed-service-rest-api .
+    - docker tag feed-service-rest-api sachinsharma1001/feed-service-rest-api:latest
+
+after_success:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker push sachinsharma1001/feed-service-rest-api
