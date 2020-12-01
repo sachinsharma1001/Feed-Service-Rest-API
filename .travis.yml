@@ -6,6 +6,11 @@ node_js:
 services:
     - docker
 
+# safelist
+branches:
+  only:
+  - master
+
 install:
     - echo "nothing needs to be installed"
 
