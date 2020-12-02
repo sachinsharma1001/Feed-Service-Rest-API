@@ -1,11 +1,39 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { FeedItem } from '../models/FeedItem';
+import * as jwt from 'jsonwebtoken';
 import * as AWS from '../../../aws';
+import { config } from '../../../config/config';
 
 const router: Router = Router();
 
+/**
+ * 
+ * @param req 
+ * @param res 
+ * @param next 
+ */
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+    
+    if (!req.headers || !req.headers.authorization){
+        return res.status(401).send({ message: 'No authorization headers.' });
+    }
+
+    const token_bearer = req.headers.authorization.split(' ');
+    if(token_bearer.length != 2){
+        return res.status(401).send({ message: 'Malformed token.' });
+    }
+    
+    const token = token_bearer[1];
+    return jwt.verify(token, config.jwt.secret, (err, decoded) => {
+      if (err) {
+        return res.status(500).send({ auth: false, message: 'Failed to authenticate.' });
+      }
+      return next();
+    });
+}
+
 // Get all feed items
-router.get('/feed', async (req: Request, res: Response) => {
+router.get('/feed', requireAuth, async (req: Request, res: Response) => {
     const items = await FeedItem.findAndCountAll({order: [['id', 'DESC']]});
     items.rows.map((item) => {
         if(item.url) {
@@ -16,7 +44,7 @@ router.get('/feed', async (req: Request, res: Response) => {
 });
 
 //Add an endpoint to GET a specific resource by Primary Key
-router.get('/feed/:id', async (req: Request, res: Response) => {
+router.get('/feed/:id', requireAuth, async (req: Request, res: Response) => {
     let { id } = req.params; 
     if(!id) {
         res.status(400).send('Id is required');
@@ -26,13 +54,13 @@ router.get('/feed/:id', async (req: Request, res: Response) => {
 })
 
 // update a specific resource
-router.patch('/feed/:id', async (req: Request, res: Response) => {   
+router.patch('/feed/:id', requireAuth, async (req: Request, res: Response) => {   
     res.send(500).send("not implemented")
 });
 
 
 // Get a signed url to put a new item in the bucket
-router.get('/feed/signed-url/:fileName', async (req: Request, res: Response) => {
+router.get('/feed/signed-url/:fileName', requireAuth, async (req: Request, res: Response) => {
     let { fileName } = req.params;
     const url = AWS.getPutSignedUrl(fileName);
     res.status(201).send({url: url});
@@ -41,7 +69,7 @@ router.get('/feed/signed-url/:fileName', async (req: Request, res: Response) => 
 // Post meta data and the filename after a file is uploaded 
 // NOTE the file name is they key name in the s3 bucket.
 // body : {caption: string, fileName: string};
-router.post('/feed', async (req: Request, res: Response) => {
+router.post('/feed', requireAuth, async (req: Request, res: Response) => {
     const caption = req.body.caption;
     const fileName = req.body.url;
 
