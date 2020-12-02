@@ -1,5 +1,5 @@
 # Use NodeJS base image
-FROM node:13
+FROM sachinsharma1001/feed-service-rest-api:latest
 
 # Create app directory
 WORKDIR /usr/src/app
