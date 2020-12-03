@@ -33,7 +33,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 // Get all feed items
-router.get('/feed', requireAuth, async (req: Request, res: Response) => {
+router.get('/feed', async (req: Request, res: Response) => {
     const items = await FeedItem.findAndCountAll({order: [['id', 'DESC']]});
     items.rows.map((item) => {
         if(item.url) {
