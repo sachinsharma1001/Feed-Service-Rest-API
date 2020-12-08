@@ -35,37 +35,37 @@ spec:
           - name: POSTGRESS_USERNAME
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: POSTGRESS_USERNAME 
           - name: POSTGRESS_PASSWORD
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: POSTGRESS_PASSWORD
           - name: POSTGRESS_DATABASE
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: POSTGRESS_DATABASE 
           - name: POSTGRESS_HOST
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: POSTGRESS_HOST
           - name: POSTGRESS_DIALECT
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: POSTGRESS_DIALECT
           - name: AWS_REGION
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: AWS_REGION
           - name: AWS_PROFILE
             valueFrom:
               configMapKeyRef:
-                name: env-config
+                name: env-secret
                 key: AWS_PROFILE      
         ports:
         - containerPort: 8080
