@@ -32,55 +32,21 @@ spec:
             initialDelaySeconds: 15  
             periodSeconds: 20      
         env:
-        - name: URL
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: URL
-        - name: AWS_MEDIA_BUCKET
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: AWS_MEDIA_BUCKET
-        - name: AWS_PROFILE
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: AWS_PROFILE
-        - name: AWS_REGION
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: AWS_REGION
-        - name: JWT_SECRET
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: JWT_SECRET
-        - name: POSTGRESS_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: POSTGRESS_DATABASE
-        - name: POSTGRESS_DIALECT
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: POSTGRESS_DIALECT      
-        - name: POSTGRESS_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: POSTGRESS_HOST
-        - name: POSTGRESS_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: env-config
-              key: POSTGRESS_USERNAME
-        - name: POSTGRESS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: env-config
-              key: POSTGRESS_PASSWORD              
+          - name: POSTGRESS_USERNAME
+            value: udagramsachindev
+          - name: POSTGRESS_PASSWORD
+            value: udagramsachindev
+          - name: POSTGRESS_DATABASE
+            value: udagramsachindev  
+          - name: POSTGRESS_HOST
+            value: udagram-microservices-dev.cp1awku8suyh.us-east-2.rds.amazonaws.com
+          - name: POSTGRESS_DIALECT
+            value: postgres 
+          - name: AWS_REGION
+            value: us-east-2
+          - name: AWS_PROFILE
+            value: default 
+          - name: AWS_MEDIA_BUCKET
+            value: udagram-microservices-bucket  
         ports:
         - containerPort: 8080
